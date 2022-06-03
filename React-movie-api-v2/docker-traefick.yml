@@ -1,0 +1,100 @@
+version: '3.8'
+
+#networks:
+networks:
+   web:
+     external: true
+   internal:
+     external: false
+
+
+# Services
+services:
+
+  nginx:
+    depends_on:
+      - api
+      - client
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./.docker/nginx
+    ports:
+      - 7080:80
+    labels:                                                                                                  
+      - traefik.http.routers.nginxantony.rule=Host(`raul.labfp.es`)                                        
+      - traefik.http.routers.nginxantony.tls=true
+      - traefik.http.routers.nginxantony.tls.certresolver=lets-encrypt
+      - traefik.port=7080
+    networks:
+      - internal
+      - web
+
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: ./Server
+    ports:
+      - 3001:80                                   
+    volumes:
+      - /app/node_modules
+      - ./Server:/app
+    networks:
+       - internal
+       - web
+    depends_on:
+      - mysql
+
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./Client
+    ports:
+      - 3000:80
+    volumes:
+      - /app/node_modules
+      - ./Client:/app
+    networks:
+       - internal
+       - web
+
+  # MySQL Service
+  mysql:
+    image: mysql/mysql-server:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: mobee
+      MYSQL_USER: root
+    volumes:
+      - ./.docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - mysqldata:/var/lib/mysql
+    networks:
+      - internal
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      interval: 5s
+      retries: 10
+
+
+# PhpMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5
+    labels:
+      - traefik.http.routers.dbantony.rule=Host(`db.raul.labfp.es`)
+      - traefik.http.routers.dbantony.tls=true
+      - traefik.http.routers.dbantony.tls.certresolver=lets-encrypt
+      - traefik.port=8080
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mysql
+    networks:
+      - internal
+      - web
+    depends_on:
+      - mysql
+
+# Volumes
+volumes:
+  mysqldata:

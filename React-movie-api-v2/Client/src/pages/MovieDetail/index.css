@@ -1,0 +1,15 @@
+.icon {
+    @apply h-10 hover:cursor-pointer mx-4
+}
+
+.selected {
+    @apply border-2 border-zinc-100
+}
+
+.icon-selected{
+    @apply icon text-red-500 
+}
+
+.icon-unselected {
+    @apply icon text-zinc-100 
+}

@@ -1,0 +1,3 @@
+.home {
+    @apply bg-home sm:h-full flex flex-col sm:flex-row bg-cover
+}

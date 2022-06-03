@@ -1,0 +1,34 @@
+.article {
+    @apply sm:p-4
+    my-3
+    hover:cursor-pointer 
+    hover:bg-gray-400  
+    sm:hover:bg-opacity-50
+    font-Montserrat
+    text-white
+    text-xl
+    text-center
+    sm:ease-out
+    sm:duration-300
+    active:bg-gray-400
+    active:bg-opacity-50
+
+    rounded-md
+    flex
+    items-center
+    justify-center
+}
+
+/* Quiero dos estilos de articulos y uno PADRE */
+
+.selectedA{
+    @apply border-2 border-amber-500 bg-zinc-800
+}
+
+.lineaV {
+    @apply  border-t-2 border-amber-500 sm:mt-10
+}
+
+.lineaH {
+    @apply  border-l-2 border-amber-500 
+}

@@ -1,0 +1,3 @@
+.btn{
+    @apply bg-amber-500 text-stone-900 font-bold w-56 p-4 mt-5 mb-7 rounded-md hover:bg-amber-400 hover:scale-105 duration-100
+}

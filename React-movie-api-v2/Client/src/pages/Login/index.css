@@ -1,0 +1,11 @@
+.item{
+    color: white;
+}
+
+.item.label{
+    color: white;
+}
+
+.item.label.Mui-focused{
+    color: blue;
+}
